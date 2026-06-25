@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Navigation Menu</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+html{
+    scroll-behavior:smooth;
+}
+
+body{
+    background:#0f172a;
+    color:white;
+}
+
+/* NAVBAR */
+.navbar{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:20px 8%;
+    z-index:1000;
+
+    background:rgba(255,255,255,0.08);
+    backdrop-filter:blur(15px);
+    -webkit-backdrop-filter:blur(15px);
+
+    transition:all 0.4s ease;
+}
+
+/* Navbar Scroll Effect */
+.navbar.scrolled{
+    background:linear-gradient(
+        90deg,
+        #2563eb,
+        #7c3aed
+    );
+    padding:12px 8%;
+    box-shadow:0 8px 25px rgba(0,0,0,0.3);
+}
+
+/* Navigation Links */
+.nav-links{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    list-style:none;
+    gap:25px;
+}
+
+.nav-links a{
+    text-decoration:none;
+    color:white;
+    font-size:17px;
+    font-weight:500;
+    padding:10px 18px;
+    border-radius:30px;
+    transition:all 0.3s ease;
+    position:relative;
+}
+
+/* Hover Effect */
+.nav-links a:hover{
+    background:white;
+    color:#2563eb;
+    transform:translateY(-3px);
+}
+
+/* Active Link */
+.nav-links a.active{
+    background:white;
+    color:#7c3aed;
+    box-shadow:0 0 15px rgba(255,255,255,0.4);
+}
+
+/* Mobile Menu Button */
+.menu-btn{
+    display:none;
+    position:absolute;
+    right:25px;
+    font-size:30px;
+    cursor:pointer;
+    color:white;
+}
+
+/* Sections */
+section{
+    height:100vh;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    font-size:3rem;
+    font-weight:bold;
+    text-align:center;
+}
+
+#home{
+    background:linear-gradient(135deg,#2563eb,#7c3aed);
+}
+
+#about{
+    background:#111827;
+}
+
+#services{
+    background:#1e293b;
+}
+
+#portfolio{
+    background:#334155;
+}
+
+#contact{
+    background:#475569;
+}
+
+/* Responsive Design */
+@media(max-width:768px){
+
+    .navbar{
+        justify-content:flex-end;
+    }
+
+    .menu-btn{
+        display:block;
+    }
+
+    .nav-links{
+        position:absolute;
+        top:100%;
+        right:15px;
+        width:250px;
+        flex-direction:column;
+        background:rgba(17,24,39,0.95);
+        backdrop-filter:blur(10px);
+        border-radius:15px;
+        padding:20px;
+        display:none;
+        gap:15px;
+        box-shadow:0 10px 25px rgba(0,0,0,0.4);
+    }
+
+    .nav-links.active{
+        display:flex;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<!-- Navigation Bar -->
+<nav class="navbar" id="navbar">
+
+    <ul class="nav-links" id="navLinks">
+        <li><a href="#home" class="active">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#services">Services</a></li>
+        <li><a href="#portfolio">Portfolio</a></li>
+        <li><a href="#contact">Contact</a></li>
+    </ul>
+
+    <div class="menu-btn" id="menuBtn">
+        ☰
+    </div>
+
+</nav>
+
+<!-- Sections -->
+<section id="home">🏠 Home</section>
+<section id="about">📖 About</section>
+<section id="services">⚡ Services</section>
+<section id="portfolio">🚀 Portfolio</section>
+<section id="contact">📞 Contact</section>
+
+<script>
+
+// Navbar scroll effect
+window.addEventListener("scroll", () => {
+
+    const navbar = document.getElementById("navbar");
+
+    if(window.scrollY > 50){
+        navbar.classList.add("scrolled");
+    } else {
+        navbar.classList.remove("scrolled");
+    }
+});
+
+// Mobile Menu Toggle
+const menuBtn = document.getElementById("menuBtn");
+const navLinks = document.getElementById("navLinks");
+
+menuBtn.addEventListener("click", () => {
+    navLinks.classList.toggle("active");
+});
+
+// Active Link on Click
+const links = document.querySelectorAll(".nav-links a");
+
+links.forEach(link => {
+
+    link.addEventListener("click", () => {
+
+        links.forEach(item =>
+            item.classList.remove("active")
+        );
+
+        link.classList.add("active");
+
+        navLinks.classList.remove("active");
+    });
+
+});
+
+// Highlight Current Section While Scrolling
+const sections = document.querySelectorAll("section");
+
+window.addEventListener("scroll", () => {
+
+    let current = "";
+
+    sections.forEach(section => {
+
+        const sectionTop = section.offsetTop - 150;
+
+        if(window.scrollY >= sectionTop){
+            current = section.getAttribute("id");
+        }
+    });
+
+    links.forEach(link => {
+
+        link.classList.remove("active");
+
+        if(link.getAttribute("href") === "#" + current){
+            link.classList.add("active");
+        }
+
+    });
+
+});
+
+</script>
+
+</body>
+</html>
